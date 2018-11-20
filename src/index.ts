@@ -6,19 +6,19 @@
  * @license   MIT
  */
 
-import { Di, Extensions } from 'fastpanel-core';
+import { Extensions } from 'fastpanel-core';
 
 module.exports = class extends Extensions.ExtensionDefines {
 
   /**
    * Registers a service provider.
    */
-  async register (di: Di.Container) : Promise<any> {}
+  async register () : Promise<any> {}
   
   /**
    * Startup a service provider.
    */
-  async startup (di: Di.Container) : Promise<any> {}
+  async startup () : Promise<any> {}
 
 }
 

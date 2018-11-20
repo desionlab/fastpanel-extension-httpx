@@ -12,10 +12,10 @@ module.exports = class extends fastpanel_core_1.Extensions.ExtensionDefines {
     /**
      * Registers a service provider.
      */
-    async register(di) { }
+    async register() { }
     /**
      * Startup a service provider.
      */
-    async startup(di) { }
+    async startup() { }
 };
 /* End of file index.ts */ 
