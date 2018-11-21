@@ -6,20 +6,6 @@
  * @license   MIT
  */
 
-import { Extensions } from 'fastpanel-core';
-
-module.exports = class extends Extensions.ExtensionDefines {
-
-  /**
-   * Registers a service provider.
-   */
-  async register () : Promise<any> {}
-  
-  /**
-   * Startup a service provider.
-   */
-  async startup () : Promise<any> {}
-
-}
+export * from './Extension';
 
 /* End of file index.ts */
