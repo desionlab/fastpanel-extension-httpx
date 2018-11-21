@@ -70,7 +70,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
             /* Mount cross-origin resource sharing. */
             web.use(cors_1.default());
             return web;
-        });
+        }, true);
         /* Registration http \ https server. */
         this.di.set('http', (container) => {
             /* Server container. */
@@ -89,7 +89,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
                 server = http_1.default.createServer(this.web);
             }
             return server;
-        });
+        }, true);
     }
     /**
      * Startup a service provider.

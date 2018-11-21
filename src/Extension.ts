@@ -77,7 +77,7 @@ export class Extension extends Extensions.ExtensionDefines {
       web.use(ExpressCors());
 
       return web;
-    });
+    }, true);
 
     /* Registration http \ https server. */
     this.di.set('http', (container: Di.Container) => {
@@ -99,7 +99,7 @@ export class Extension extends Extensions.ExtensionDefines {
       }
 
       return server;
-    });
+    }, true);
   }
   
   /**
