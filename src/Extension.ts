@@ -47,7 +47,7 @@ export class Extension extends Extensions.ExtensionDefines {
    */
   async register () : Promise<any> {
     /* Registration express server. */
-    this.di.set('web', (container: Di.Container) => {
+    this.di.set('web', (di: Di.Container) => {
       /* Create server. */
       let web = Express();
       
@@ -80,7 +80,7 @@ export class Extension extends Extensions.ExtensionDefines {
     }, true);
 
     /* Registration http \ https server. */
-    this.di.set('http', (container: Di.Container) => {
+    this.di.set('http', (di: Di.Container) => {
       /* Server container. */
       let server = null;
       
@@ -106,14 +106,21 @@ export class Extension extends Extensions.ExtensionDefines {
    * Startup a service provider.
    */
   async startup () : Promise<any> {
+    /* Fire event. */
+    this.events.emit('web:getMiddleware', this.web);
+    
+    /* Fire event. */
+    this.events.emit('web:getRoutes', this.web);
+
     /* Run server. */
     this.http.listen({
       port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
       host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
     });
 
-    /* Fire http startup event. */
-    this.events.emit('http:startup');
+    /* Fire event. */
+    this.events.emit('http:startup', this.http);
+    this.events.emit('web:startup', this.web);
   }
 
 }

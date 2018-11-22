@@ -48,7 +48,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
      */
     async register() {
         /* Registration express server. */
-        this.di.set('web', (container) => {
+        this.di.set('web', (di) => {
             /* Create server. */
             let web = express_1.default();
             /* Server configuration. */
@@ -72,7 +72,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
             return web;
         }, true);
         /* Registration http \ https server. */
-        this.di.set('http', (container) => {
+        this.di.set('http', (di) => {
             /* Server container. */
             let server = null;
             /* SSL Files paths. */
@@ -95,13 +95,18 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
      * Startup a service provider.
      */
     async startup() {
+        /* Fire event. */
+        this.events.emit('web:getMiddleware', this.web);
+        /* Fire event. */
+        this.events.emit('web:getRoutes', this.web);
         /* Run server. */
         this.http.listen({
             port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
             host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
         });
-        /* Fire http startup event. */
-        this.events.emit('http:startup');
+        /* Fire event. */
+        this.events.emit('http:startup', this.http);
+        this.events.emit('web:startup', this.web);
     }
 }
 exports.Extension = Extension;
