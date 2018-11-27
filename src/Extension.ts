@@ -12,6 +12,7 @@ import path from 'path';
 import http from 'http';
 import https from 'https';
 import morgan from 'morgan';
+import Vorpal from 'vorpal';
 import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
@@ -100,6 +101,11 @@ export class Extension extends Extensions.ExtensionDefines {
 
       return server;
     }, true);
+    
+    /* Registered cli commands. */
+    this.events.once('cli:getCommands', (cli: Vorpal) => {
+      console.log('cli:getCommands');
+    });
   }
   
   /**
