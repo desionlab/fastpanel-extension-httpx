@@ -114,8 +114,6 @@ export class Extension extends Extensions.ExtensionDefines {
   async startup () : Promise<any> {
     /* Fire event. */
     this.events.emit('web:getMiddleware', this.web);
-    
-    /* Fire event. */
     this.events.emit('web:getRoutes', this.web);
 
     /* Run server. */

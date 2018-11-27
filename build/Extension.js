@@ -101,7 +101,6 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
     async startup() {
         /* Fire event. */
         this.events.emit('web:getMiddleware', this.web);
-        /* Fire event. */
         this.events.emit('web:getRoutes', this.web);
         /* Run server. */
         this.http.listen({
