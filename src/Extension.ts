@@ -103,9 +103,7 @@ export class Extension extends Extensions.ExtensionDefines {
     }, true);
     
     /* Registered cli commands. */
-    this.events.once('cli:getCommands', (cli: Vorpal) => {
-      console.log('cli:getCommands');
-    });
+    this.events.once('cli:getCommands', (cli: Vorpal) => {});
   }
   
   /**

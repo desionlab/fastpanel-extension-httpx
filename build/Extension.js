@@ -91,9 +91,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
             return server;
         }, true);
         /* Registered cli commands. */
-        this.events.once('cli:getCommands', (cli) => {
-            console.log('cli:getCommands');
-        });
+        this.events.once('cli:getCommands', (cli) => { });
     }
     /**
      * Startup a service provider.
