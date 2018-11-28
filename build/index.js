@@ -11,4 +11,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./Extension"));
+__export(require("./RoutDefines"));
 /* End of file index.ts */ 

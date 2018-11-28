@@ -6,3 +6,4 @@
  * @license   MIT
  */
 export * from './Extension';
+export * from './RoutDefines';

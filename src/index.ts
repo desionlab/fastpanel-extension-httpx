@@ -7,5 +7,6 @@
  */
 
 export * from './Extension';
+export * from './RoutDefines';
 
 /* End of file index.ts */
