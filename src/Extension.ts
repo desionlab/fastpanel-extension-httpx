@@ -17,7 +17,7 @@ import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
-import { Di, Extensions } from 'fastpanel-core';
+import { Di, Extensions, Application } from 'fastpanel-core';
 
 /**
  * Create file stream instant.
@@ -101,6 +101,9 @@ export class Extension extends Extensions.ExtensionDefines {
 
       return server;
     }, true);
+    
+    /* Install and configure the basic components of the system. */
+    this.events.once('app:setup', async (app: Application) => {});
     
     /* Registered cli commands. */
     this.events.once('cli:getCommands', (cli: Vorpal) => {});
