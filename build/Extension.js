@@ -47,49 +47,52 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
      * Registers a service provider.
      */
     async register() {
-        /* Registration express server. */
-        this.di.set('web', (di) => {
-            /* Create server. */
-            let web = express_1.default();
-            /* Server configuration. */
-            web.set('trust proxy', true);
-            web.set('json spaces', ((this.config.get('Env.NODE_ENV', 'develop') !== 'production') ? 2 : false));
-            /* Mount http\s request logger. */
-            web.use(morgan_1.default('combined', {
-                stream: getLogsStream((process.env.LOGGER_PATH) ? process.env.LOGGER_PATH : 'App/Logs'),
-                skip: function (request, response) { return response.statusCode < 400; }
-            }));
-            /* Mount static files handler. */
-            web.use(express_1.default.static('public'));
-            /* Mount ajax request parser. */
-            web.use(body_parser_1.default.urlencoded({ extended: false }));
-            /* Mount json request parser. */
-            web.use(body_parser_1.default.json());
-            /* Mount cookie parser. */
-            web.use(cookie_parser_1.default());
-            /* Mount cross-origin resource sharing. */
-            web.use(cors_1.default());
-            return web;
-        }, true);
-        /* Registration http \ https server. */
-        this.di.set('http', (di) => {
-            /* Server container. */
-            let server = null;
-            /* SSL Files paths. */
-            let sslKey = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
-            let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
-            /* Create server. */
-            if (fs_1.default.existsSync(sslKey) && fs_1.default.existsSync(sslCert)) {
-                server = https_1.default.createServer({
-                    key: fs_1.default.readFileSync(sslKey),
-                    cert: fs_1.default.readFileSync(sslCert)
-                }, this.web);
-            }
-            else {
-                server = http_1.default.createServer(this.web);
-            }
-            return server;
-        }, true);
+        /* Check context. */
+        if (this.context instanceof fastpanel_core_1.Cluster.Handler) {
+            /* Registration express server. */
+            this.di.set('web', (di) => {
+                /* Create server. */
+                let web = express_1.default();
+                /* Server configuration. */
+                web.set('trust proxy', true);
+                web.set('json spaces', ((this.config.get('Env.NODE_ENV', 'develop') !== 'production') ? 2 : false));
+                /* Mount http\s request logger. */
+                web.use(morgan_1.default('combined', {
+                    stream: getLogsStream((process.env.LOGGER_PATH) ? process.env.LOGGER_PATH : 'App/Logs'),
+                    skip: function (request, response) { return response.statusCode < 400; }
+                }));
+                /* Mount static files handler. */
+                web.use(express_1.default.static('public'));
+                /* Mount ajax request parser. */
+                web.use(body_parser_1.default.urlencoded({ extended: false }));
+                /* Mount json request parser. */
+                web.use(body_parser_1.default.json());
+                /* Mount cookie parser. */
+                web.use(cookie_parser_1.default());
+                /* Mount cross-origin resource sharing. */
+                web.use(cors_1.default());
+                return web;
+            }, true);
+            /* Registration http \ https server. */
+            this.di.set('http', (di) => {
+                /* Server container. */
+                let server = null;
+                /* SSL Files paths. */
+                let sslKey = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
+                let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
+                /* Create server. */
+                if (fs_1.default.existsSync(sslKey) && fs_1.default.existsSync(sslCert)) {
+                    server = https_1.default.createServer({
+                        key: fs_1.default.readFileSync(sslKey),
+                        cert: fs_1.default.readFileSync(sslCert)
+                    }, this.web);
+                }
+                else {
+                    server = http_1.default.createServer(this.web);
+                }
+                return server;
+            }, true);
+        }
         /* Install and configure the basic components of the system. */
         this.events.once('app:setup', async (app) => { });
         /* Registered cli commands. */
@@ -99,17 +102,20 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
      * Startup a service provider.
      */
     async startup() {
-        /* Fire event. */
-        this.events.emit('web:getMiddleware', this.web);
-        this.events.emit('web:getRoutes', this.web);
-        /* Run server. */
-        this.http.listen({
-            port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
-            host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
-        });
-        /* Fire event. */
-        this.events.emit('http:startup', this.http);
-        this.events.emit('web:startup', this.web);
+        /* Check context. */
+        if (this.context instanceof fastpanel_core_1.Cluster.Handler) {
+            /* Fire event. */
+            this.events.emit('web:getMiddleware', this.web);
+            this.events.emit('web:getRoutes', this.web);
+            /* Run server. */
+            this.http.listen({
+                port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
+                host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
+            });
+            /* Fire event. */
+            this.events.emit('http:startup', this.http);
+            this.events.emit('web:startup', this.web);
+        }
     }
 }
 exports.Extension = Extension;

@@ -17,7 +17,7 @@ import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
-import { Di, Extensions, Application } from 'fastpanel-core';
+import { Di, Extensions, Application, Cluster } from 'fastpanel-core';
 
 /**
  * Create file stream instant.
@@ -47,60 +47,63 @@ export class Extension extends Extensions.ExtensionDefines {
    * Registers a service provider.
    */
   async register () : Promise<any> {
-    /* Registration express server. */
-    this.di.set('web', (di: Di.Container) => {
-      /* Create server. */
-      let web = Express();
-      
-      /* Server configuration. */
-      web.set('trust proxy', true);
-      web.set('json spaces', ((this.config.get('Env.NODE_ENV', 'develop') !== 'production') ? 2 : false));
-      
-      /* Mount http\s request logger. */
-      web.use(morgan('combined', {
-        stream: getLogsStream((process.env.LOGGER_PATH) ? process.env.LOGGER_PATH : 'App/Logs'),
-        skip: function (request, response) { return response.statusCode < 400 }
-      }));
-      
-      /* Mount static files handler. */
-      web.use(Express.static('public'));
-      
-      /* Mount ajax request parser. */
-      web.use(ExpressBodyParser.urlencoded({ extended: false }));
+    /* Check context. */
+    if (this.context instanceof Cluster.Handler) {
+      /* Registration express server. */
+      this.di.set('web', (di: Di.Container) => {
+        /* Create server. */
+        let web = Express();
+        
+        /* Server configuration. */
+        web.set('trust proxy', true);
+        web.set('json spaces', ((this.config.get('Env.NODE_ENV', 'develop') !== 'production') ? 2 : false));
+        
+        /* Mount http\s request logger. */
+        web.use(morgan('combined', {
+          stream: getLogsStream((process.env.LOGGER_PATH) ? process.env.LOGGER_PATH : 'App/Logs'),
+          skip: function (request, response) { return response.statusCode < 400 }
+        }));
+        
+        /* Mount static files handler. */
+        web.use(Express.static('public'));
+        
+        /* Mount ajax request parser. */
+        web.use(ExpressBodyParser.urlencoded({ extended: false }));
 
-      /* Mount json request parser. */
-      web.use(ExpressBodyParser.json());
-      
-      /* Mount cookie parser. */
-      web.use(ExpressCookieParser());
-      
-      /* Mount cross-origin resource sharing. */
-      web.use(ExpressCors());
+        /* Mount json request parser. */
+        web.use(ExpressBodyParser.json());
+        
+        /* Mount cookie parser. */
+        web.use(ExpressCookieParser());
+        
+        /* Mount cross-origin resource sharing. */
+        web.use(ExpressCors());
 
-      return web;
-    }, true);
+        return web;
+      }, true);
 
-    /* Registration http \ https server. */
-    this.di.set('http', (di: Di.Container) => {
-      /* Server container. */
-      let server = null;
-      
-      /* SSL Files paths. */
-      let sslKey  = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
-      let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
-      
-      /* Create server. */
-      if (fs.existsSync(sslKey) && fs.existsSync(sslCert)) {
-        server = https.createServer({
-          key: fs.readFileSync(sslKey),
-          cert: fs.readFileSync(sslCert)
-        }, this.web);
-      } else {
-        server = http.createServer(this.web);
-      }
+      /* Registration http \ https server. */
+      this.di.set('http', (di: Di.Container) => {
+        /* Server container. */
+        let server = null;
+        
+        /* SSL Files paths. */
+        let sslKey  = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
+        let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
+        
+        /* Create server. */
+        if (fs.existsSync(sslKey) && fs.existsSync(sslCert)) {
+          server = https.createServer({
+            key: fs.readFileSync(sslKey),
+            cert: fs.readFileSync(sslCert)
+          }, this.web);
+        } else {
+          server = http.createServer(this.web);
+        }
 
-      return server;
-    }, true);
+        return server;
+      }, true);
+    }
     
     /* Install and configure the basic components of the system. */
     this.events.once('app:setup', async (app: Application) => {});
@@ -113,19 +116,22 @@ export class Extension extends Extensions.ExtensionDefines {
    * Startup a service provider.
    */
   async startup () : Promise<any> {
-    /* Fire event. */
-    this.events.emit('web:getMiddleware', this.web);
-    this.events.emit('web:getRoutes', this.web);
+    /* Check context. */
+    if (this.context instanceof Cluster.Handler) {
+      /* Fire event. */
+      this.events.emit('web:getMiddleware', this.web);
+      this.events.emit('web:getRoutes', this.web);
 
-    /* Run server. */
-    this.http.listen({
-      port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
-      host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
-    });
+      /* Run server. */
+      this.http.listen({
+        port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
+        host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
+      });
 
-    /* Fire event. */
-    this.events.emit('http:startup', this.http);
-    this.events.emit('web:startup', this.web);
+      /* Fire event. */
+      this.events.emit('http:startup', this.http);
+      this.events.emit('web:startup', this.web);
+    }
   }
 
 }
