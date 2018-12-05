@@ -17,7 +17,8 @@ import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
-import { Di, Extensions, Application, Cluster } from 'fastpanel-core';
+import { Di, Extensions, Cluster } from '@fastpanel/core';
+import { SetupTaskDefinesMethod } from '@fastpanel/core/build/Commands';
 
 /**
  * Create file stream instant.
@@ -106,10 +107,10 @@ export class Extension extends Extensions.ExtensionDefines {
     }
     
     /* Install and configure the basic components of the system. */
-    this.events.once('app:setup', async (app: Application) => {});
+    this.events.on('app:getSetupTasks', async (list: Array<SetupTaskDefinesMethod>) => {});
     
     /* Registered cli commands. */
-    this.events.once('cli:getCommands', (cli: Vorpal) => {});
+    this.events.once('cli:getCommands', async (cli: Vorpal) => {});
   }
   
   /**

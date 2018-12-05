@@ -20,7 +20,7 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
-const fastpanel_core_1 = require("fastpanel-core");
+const core_1 = require("@fastpanel/core");
 /**
  * Create file stream instant.
  *
@@ -42,13 +42,13 @@ function getLogsStream(basePath) {
  *
  * @version 1.0.0
  */
-class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
+class Extension extends core_1.Extensions.ExtensionDefines {
     /**
      * Registers a service provider.
      */
     async register() {
         /* Check context. */
-        if (this.context instanceof fastpanel_core_1.Cluster.Handler) {
+        if (this.context instanceof core_1.Cluster.Handler) {
             /* Registration express server. */
             this.di.set('web', (di) => {
                 /* Create server. */
@@ -103,7 +103,7 @@ class Extension extends fastpanel_core_1.Extensions.ExtensionDefines {
      */
     async startup() {
         /* Check context. */
-        if (this.context instanceof fastpanel_core_1.Cluster.Handler) {
+        if (this.context instanceof core_1.Cluster.Handler) {
             /* Fire event. */
             this.events.emit('web:getMiddleware', this.web);
             this.events.emit('web:getRoutes', this.web);

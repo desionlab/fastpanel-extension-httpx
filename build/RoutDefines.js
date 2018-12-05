@@ -7,7 +7,7 @@
  * @license   MIT
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const fastpanel_core_1 = require("fastpanel-core");
+const core_1 = require("@fastpanel/core");
 const express_1 = require("express");
 /**
  * Class RoutDefines
@@ -16,7 +16,7 @@ const express_1 = require("express");
  *
  * @version 1.0.0
  */
-class RoutDefines extends fastpanel_core_1.Di.Injectable {
+class RoutDefines extends core_1.Di.Injectable {
     /**
      * RoutDefines constructor.
      *

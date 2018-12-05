@@ -6,7 +6,7 @@
  * @license   MIT
  */
 
-import { Di } from 'fastpanel-core';
+import { Di } from '@fastpanel/core';
 import { Router } from 'express';
 import { IRouter } from 'express-serve-static-core';
 
