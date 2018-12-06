@@ -1,5 +1,5 @@
 {
-  "name": "fastpanel-extension-httpx",
+  "name": "@fastpanel/http",
   "version": "0.0.1",
   "description": "Extension to work with the \"HTTP\" protocol.",
   "author": "Desionlab <fenixphp@gmail.com>",
