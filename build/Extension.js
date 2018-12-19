@@ -63,14 +63,14 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                 }));
                 /* Mount static files handler. */
                 web.use(express_1.default.static('public'));
+                /* Mount cross-origin resource sharing. */
+                web.use(cors_1.default());
+                /* Mount cookie parser. */
+                web.use(cookie_parser_1.default());
                 /* Mount ajax request parser. */
                 web.use(body_parser_1.default.urlencoded({ extended: false }));
                 /* Mount json request parser. */
                 web.use(body_parser_1.default.json());
-                /* Mount cookie parser. */
-                web.use(cookie_parser_1.default());
-                /* Mount cross-origin resource sharing. */
-                web.use(cors_1.default());
                 return web;
             }, true);
             /* Registration http \ https server. */

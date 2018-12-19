@@ -68,18 +68,18 @@ export class Extension extends Extensions.ExtensionDefines {
         /* Mount static files handler. */
         web.use(Express.static('public'));
         
+        /* Mount cross-origin resource sharing. */
+        web.use(ExpressCors());
+
+        /* Mount cookie parser. */
+        web.use(ExpressCookieParser());
+        
         /* Mount ajax request parser. */
         web.use(ExpressBodyParser.urlencoded({ extended: false }));
 
         /* Mount json request parser. */
         web.use(ExpressBodyParser.json());
         
-        /* Mount cookie parser. */
-        web.use(ExpressCookieParser());
-        
-        /* Mount cross-origin resource sharing. */
-        web.use(ExpressCors());
-
         return web;
       }, true);
 
