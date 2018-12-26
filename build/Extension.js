@@ -94,7 +94,9 @@ class Extension extends core_1.Extensions.ExtensionDefines {
             }, true);
         }
         /* Install and configure the basic components of the system. */
-        this.events.on('app:getSetupTasks', async (list) => { });
+        this.events.on('app:getSetupTasks', async (list) => {
+            list.push(async (command, argv) => { });
+        });
         /* Registered cli commands. */
         this.events.once('cli:getCommands', async (cli) => { });
     }
