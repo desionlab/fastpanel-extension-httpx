@@ -108,7 +108,7 @@ export class Extension extends Extensions.ExtensionDefines {
     
     /* Install and configure the basic components of the system. */
     this.events.on('app:getSetupTasks', async (list: Array<SetupTaskDefinesMethod>) => {
-      list.push(async (command: Vorpal.CommandInstance, argv?: any) => {});
+      list.push(async (command: Vorpal.CommandInstance, args?: any) => {});
     });
     
     /* Registered cli commands. */
