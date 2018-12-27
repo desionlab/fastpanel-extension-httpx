@@ -93,12 +93,12 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                 return server;
             }, true);
         }
-        /* Install and configure the basic components of the system. */
-        this.events.on('app:getSetupTasks', async (list) => {
-            list.push(async (command, args) => { });
-        });
         /* Registered cli commands. */
         this.events.once('cli:getCommands', async (cli) => { });
+        /* Install and configure the basic components of the system. */
+        this.events.on('app:getSetupSubscriptions', (list) => {
+            list.push(async (command, args) => { });
+        });
     }
     /**
      * Startup a service provider.
