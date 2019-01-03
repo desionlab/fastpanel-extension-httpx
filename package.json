@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/desionlab/fastpanel-extension-httpx.git"
+    "url": "git+https://github.com/fastpanel/http.git"
   },
   "bugs": {
-    "url": "https://github.com/desionlab/fastpanel-extension-httpx/issues"
+    "url": "https://github.com/fastpanel/http/issues"
   },
-  "homepage": "https://github.com/desionlab/fastpanel-extension-httpx#readme",
+  "homepage": "https://github.com/fastpanel/http#readme",
   "keywords": [
     "nodejs",
     "typescript",
@@ -43,7 +43,7 @@
     "response-time": "^2.3.2"
   },
   "devDependencies": {
-    "@fastpanel/core": "github:desionlab/fastpanel-core#develop",
+    "@fastpanel/core": "github:fastpanel/core#develop",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",
     "@types/compression": "0.0.36",
