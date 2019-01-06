@@ -48,7 +48,7 @@ class Extension extends core_1.Extensions.ExtensionDefines {
      */
     async register() {
         /* Check context. */
-        if (this.context instanceof core_1.Cluster.Handler) {
+        if (this.context instanceof core_1.Worker.Handler) {
             /* Registration express server. */
             this.di.set('web', (di) => {
                 /* Create server. */
@@ -105,7 +105,7 @@ class Extension extends core_1.Extensions.ExtensionDefines {
      */
     async startup() {
         /* Check context. */
-        if (this.context instanceof core_1.Cluster.Handler) {
+        if (this.context instanceof core_1.Worker.Handler) {
             /* Fire event. */
             this.events.emit('web:getMiddleware', this.web);
             this.events.emit('web:getRoutes', this.web);

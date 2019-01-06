@@ -17,7 +17,7 @@ import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
-import { Cli, Di, Extensions, Cluster } from '@fastpanel/core';
+import { Cli, Di, Extensions, Worker } from '@fastpanel/core';
 
 /**
  * Create file stream instant.
@@ -48,7 +48,7 @@ export class Extension extends Extensions.ExtensionDefines {
    */
   async register () : Promise<any> {
     /* Check context. */
-    if (this.context instanceof Cluster.Handler) {
+    if (this.context instanceof Worker.Handler) {
       /* Registration express server. */
       this.di.set('web', (di: Di.Container) => {
         /* Create server. */
@@ -119,7 +119,7 @@ export class Extension extends Extensions.ExtensionDefines {
    */
   async startup () : Promise<any> {
     /* Check context. */
-    if (this.context instanceof Cluster.Handler) {
+    if (this.context instanceof Worker.Handler) {
       /* Fire event. */
       this.events.emit('web:getMiddleware', this.web);
       this.events.emit('web:getRoutes', this.web);
