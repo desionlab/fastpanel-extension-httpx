@@ -21,6 +21,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const core_1 = require("@fastpanel/core");
+const Const_1 = require("./Const");
 /**
  * Create file stream instant.
  *
@@ -78,8 +79,8 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                 /* Server container. */
                 let server = null;
                 /* SSL Files paths. */
-                let sslKey = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
-                let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
+                let sslKey = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.key';
+                let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.cert';
                 /* Create server. */
                 if (fs_1.default.existsSync(sslKey) && fs_1.default.existsSync(sslCert)) {
                     server = https_1.default.createServer({
@@ -97,7 +98,13 @@ class Extension extends core_1.Extensions.ExtensionDefines {
         this.events.once('cli:getCommands', async (cli) => { });
         /* Install and configure the basic components of the system. */
         this.events.on('app:getSetupSubscriptions', (list) => {
-            list.push(async (command, args) => { });
+            list.push(async (command, args) => {
+                /* Check and create default config file. */
+                if (!this.config.get('Ext/Web', false)) {
+                    this.config.set('Ext/Web', Const_1.WEB_CONFIG);
+                    this.config.save('Ext/Web', true);
+                }
+            });
         });
     }
     /**
@@ -111,8 +118,8 @@ class Extension extends core_1.Extensions.ExtensionDefines {
             this.events.emit('web:getRoutes', this.web);
             /* Run server. */
             this.http.listen({
-                port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
-                host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
+                port: this.config.get('Env.WEB_PORT', this.config.get('Ext/Web.port', 3000)),
+                host: this.config.get('Env.WEB_HOST', this.config.get('Ext/Web.host', '127.0.0.1'))
             });
             /* Fire event. */
             this.events.emit('http:startup', this.http);

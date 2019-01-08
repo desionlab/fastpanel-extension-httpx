@@ -18,6 +18,7 @@ import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
 import { Cli, Di, Extensions, Worker } from '@fastpanel/core';
+import { WEB_CONFIG } from './Const';
 
 /**
  * Create file stream instant.
@@ -88,8 +89,8 @@ export class Extension extends Extensions.ExtensionDefines {
         let server = null;
         
         /* SSL Files paths. */
-        let sslKey  = './ssl/' + this.config.get('Extensions/Web.domain') + '.key';
-        let sslCert = './ssl/' + this.config.get('Extensions/Web.domain') + '.cert';
+        let sslKey  = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.key';
+        let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.cert';
         
         /* Create server. */
         if (fs.existsSync(sslKey) && fs.existsSync(sslCert)) {
@@ -110,7 +111,13 @@ export class Extension extends Extensions.ExtensionDefines {
 
     /* Install and configure the basic components of the system. */
     this.events.on('app:getSetupSubscriptions', (list: Array<Cli.CommandSubscriptionDefines>) => {
-      list.push(async (command: Vorpal.CommandInstance, args?: any) => {});
+      list.push(async (command: Vorpal.CommandInstance, args?: any) => {
+        /* Check and create default config file. */
+        if (!this.config.get('Ext/Web', false)) {
+          this.config.set('Ext/Web', WEB_CONFIG);
+          this.config.save('Ext/Web', true);
+        }
+      });
     });
   }
   
@@ -126,8 +133,8 @@ export class Extension extends Extensions.ExtensionDefines {
 
       /* Run server. */
       this.http.listen({
-        port: this.config.get('Extensions/Web.port', this.config.get('Env.PORT', 3000)),
-        host: this.config.get('Extensions/Web.host', this.config.get('Env.HOST', '127.0.0.1'))
+        port: this.config.get('Env.WEB_PORT', this.config.get('Ext/Web.port', 3000)),
+        host: this.config.get('Env.WEB_HOST', this.config.get('Ext/Web.host', '127.0.0.1'))
       });
 
       /* Fire event. */
