@@ -21,7 +21,6 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const core_1 = require("@fastpanel/core");
-const Const_1 = require("./Const");
 /**
  * Create file stream instant.
  *
@@ -95,16 +94,9 @@ class Extension extends core_1.Extensions.ExtensionDefines {
             }, true);
         }
         /* Registered cli commands. */
-        this.events.once('cli:getCommands', async (cli) => { });
-        /* Install and configure the basic components of the system. */
-        this.events.on('app:getSetupSubscriptions', (list) => {
-            list.push(async (command, args) => {
-                /* Check and create default config file. */
-                if (!this.config.get('Ext/Web', false)) {
-                    this.config.set('Ext/Web', Const_1.WEB_CONFIG);
-                    this.config.save('Ext/Web', true);
-                }
-            });
+        this.events.once('cli:getCommands', async (cli) => {
+            const { Setup } = require('./Commands/Setup');
+            await (new Setup(this.di)).initialize();
         });
     }
     /**

@@ -12,7 +12,7 @@ import path from 'path';
 import http from 'http';
 import https from 'https';
 import morgan from 'morgan';
-import Vorpal from 'vorpal';
+import Caporal from 'caporal';
 import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
@@ -107,17 +107,9 @@ export class Extension extends Extensions.ExtensionDefines {
     }
     
     /* Registered cli commands. */
-    this.events.once('cli:getCommands', async (cli: Vorpal) => {});
-
-    /* Install and configure the basic components of the system. */
-    this.events.on('app:getSetupSubscriptions', (list: Array<Cli.CommandSubscriptionDefines>) => {
-      list.push(async (command: Vorpal.CommandInstance, args?: any) => {
-        /* Check and create default config file. */
-        if (!this.config.get('Ext/Web', false)) {
-          this.config.set('Ext/Web', WEB_CONFIG);
-          this.config.save('Ext/Web', true);
-        }
-      });
+    this.events.once('cli:getCommands', async (cli: Caporal) => {
+      const { Setup } = require('./Commands/Setup');
+      await (new Setup(this.di)).initialize();
     });
   }
   
