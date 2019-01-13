@@ -26,7 +26,7 @@ export declare class RoutDefines extends Di.Injectable {
      */
     constructor(di?: Di.Container);
     /**
-     * Initialize command.
+     * Initialize routes.
      */
-    initialize(): Promise<any>;
+    initialize(): void;
 }

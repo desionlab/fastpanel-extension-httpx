@@ -34,9 +34,9 @@ export class RoutDefines extends Di.Injectable {
   }
 
   /**
-   * Initialize command.
+   * Initialize routes.
    */
-  async initialize () : Promise<any> {}
+  public initialize () {}
 
 }
 

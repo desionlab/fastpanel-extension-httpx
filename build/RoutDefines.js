@@ -30,9 +30,9 @@ class RoutDefines extends core_1.Di.Injectable {
         this.router = express_1.Router();
     }
     /**
-     * Initialize command.
+     * Initialize routes.
      */
-    async initialize() { }
+    initialize() { }
 }
 exports.RoutDefines = RoutDefines;
 /* End of file RoutDefines.ts */ 
