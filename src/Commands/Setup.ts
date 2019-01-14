@@ -21,7 +21,7 @@ export class Setup extends Cli.CommandDefines {
    */
   public initialize () {
     this.cli
-    .command('@fastpanel/http setup', 'Configure http components.')
+    .command('fastpanel/http setup', 'Configure http components.')
     .option('-e, --env', 'Save as current environment settings.')
     .option('-f, --force', 'Forced command running.')
     .option('-y, --yes', 'Assume yes if prompted.')
