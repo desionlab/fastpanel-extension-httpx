@@ -24,7 +24,7 @@ export class Setup extends Cli.CommandDefines {
     this.cli
     .command('fastpanel/http setup', 'Configure http components.')
     .option('-e, --env', 'Save as current environment settings.')
-    .option('-f, --force', 'Forced command running.')
+    .option('-f, --force', 'Forced reconfiguration of components.')
     .visible(false)
     .action((args: {[k: string]: any}, options: {[k: string]: any}, logger: Winston.Logger) => {
       return new Promise(async (resolve, reject) => {
