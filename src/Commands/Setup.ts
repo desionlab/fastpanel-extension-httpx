@@ -6,6 +6,7 @@
  * @license   MIT
  */
 
+import { EOL } from 'os';
 import Winston from 'winston';
 import { Cli } from '@fastpanel/core';
 
@@ -24,13 +25,20 @@ export class Setup extends Cli.CommandDefines {
     .command('fastpanel/http setup', 'Configure http components.')
     .option('-e, --env', 'Save as current environment settings.')
     .option('-f, --force', 'Forced command running.')
-    .option('-y, --yes', 'Assume yes if prompted.')
     .visible(false)
     .action((args: {[k: string]: any}, options: {[k: string]: any}, logger: Winston.Logger) => {
       return new Promise(async (resolve, reject) => {
-        logger.debug('@fastpanel/http setup');
-        logger.debug(args);
-        logger.debug(options);
+        /* Info message. */
+        logger.info(`${EOL}Configure http components.`);
+
+        if (!this.config.get('Ext/Web', false) || options.force) {
+          
+        } else {
+          /* Info message. */
+          logger.info(` Everything is already configured. ${EOL}`);
+        }
+
+        /* Command complete. */
         resolve();
       });
     });
