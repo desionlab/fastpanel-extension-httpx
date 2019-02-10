@@ -6,12 +6,10 @@ Extension to work with the "HTTP" protocol.
 ## Env
 
 ```
-
-# HTTP (Express) extension section.
+# Defines the HTTP (Express) environment.
 WEB_HOST=0.0.0.0
 WEB_PORT=3001
 WEB_DOMAIN=localhost
-
 ```
 
 ---
