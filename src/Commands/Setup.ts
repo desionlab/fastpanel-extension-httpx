@@ -9,6 +9,7 @@
 import { EOL } from 'os';
 import Winston from 'winston';
 import { Cli } from '@fastpanel/core';
+import { WEB_CONFIG } from '../Const';
 
 /**
  * Class Setup
@@ -32,7 +33,41 @@ export class Setup extends Cli.CommandDefines {
         logger.info(`${EOL}Configure http components.`);
 
         if (!this.config.get('Ext/Web', false) || options.force) {
+          /* Prompts list. */
+          let questions = [
+            /* Host. */
+            {
+              type: 'input',
+              name: 'host',
+              message: 'Host (IP) for HTTP server?',
+              default: this.config.get('Ext/Web.host', WEB_CONFIG.host)
+            },
+            /* Port. */
+            {
+              type: 'input',
+              name: 'port',
+              message: 'Port for HTTP server?',
+              default: this.config.get('Ext/Web.port', WEB_CONFIG.port)
+            },
+            /* Domain. */
+            {
+              type: 'input',
+              name: 'domain',
+              message: 'Domain name for http server?',
+              default: this.config.get('Ext/Web.domain', WEB_CONFIG.domain)
+            }
+          ];
           
+          /* Show prompts to user. */
+          let config = await this.prompt(questions);
+          
+          /* Save data. */
+          this.config.set('Ext/Web', config);
+          this.config.save('Ext/Web', !(options.env));
+
+          /* Info message. */
+          logger.info(`${EOL}Applied:`);
+          logger.info('', this.config.get('Ext/Web'));
         } else {
           /* Info message. */
           logger.info(` Everything is already configured. ${EOL}`);

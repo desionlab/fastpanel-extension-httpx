@@ -2,7 +2,7 @@
  * RoutDefines.ts
  * 
  * @author    Desionlab <fenixphp@gmail.com>
- * @copyright 2014 - 2018 Desionlab
+ * @copyright 2014 - 2019 Desionlab
  * @license   MIT
  */
 
@@ -13,7 +13,7 @@ import { IRouter } from 'express-serve-static-core';
 /**
  * Class RoutDefines
  * 
- * Command abstract class.
+ * Controller abstract class.
  * 
  * @version 1.0.0
  */

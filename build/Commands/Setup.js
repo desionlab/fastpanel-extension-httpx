@@ -9,6 +9,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const os_1 = require("os");
 const core_1 = require("@fastpanel/core");
+const Const_1 = require("../Const");
 /**
  * Class Setup
  *
@@ -29,6 +30,38 @@ class Setup extends core_1.Cli.CommandDefines {
                 /* Info message. */
                 logger.info(`${os_1.EOL}Configure http components.`);
                 if (!this.config.get('Ext/Web', false) || options.force) {
+                    /* Prompts list. */
+                    let questions = [
+                        /* Host. */
+                        {
+                            type: 'input',
+                            name: 'host',
+                            message: 'Host (IP) for HTTP server?',
+                            default: this.config.get('Ext/Web.host', Const_1.WEB_CONFIG.host)
+                        },
+                        /* Port. */
+                        {
+                            type: 'input',
+                            name: 'port',
+                            message: 'Port for HTTP server?',
+                            default: this.config.get('Ext/Web.port', Const_1.WEB_CONFIG.port)
+                        },
+                        /* Domain. */
+                        {
+                            type: 'input',
+                            name: 'domain',
+                            message: 'Domain name for http server?',
+                            default: this.config.get('Ext/Web.domain', Const_1.WEB_CONFIG.domain)
+                        }
+                    ];
+                    /* Show prompts to user. */
+                    let config = await this.prompt(questions);
+                    /* Save data. */
+                    this.config.set('Ext/Web', config);
+                    this.config.save('Ext/Web', !(options.env));
+                    /* Info message. */
+                    logger.info(`${os_1.EOL}Applied:`);
+                    logger.info('', this.config.get('Ext/Web'));
                 }
                 else {
                     /* Info message. */

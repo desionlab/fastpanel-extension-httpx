@@ -2,7 +2,7 @@
  * Extension.ts
  * 
  * @author    Desionlab <fenixphp@gmail.com>
- * @copyright 2014 - 2018 Desionlab
+ * @copyright 2014 - 2019 Desionlab
  * @license   MIT
  */
 
@@ -17,7 +17,7 @@ import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
 import ExpressCors from 'cors';
-import { Cli, Di, Extensions, Worker } from '@fastpanel/core';
+import { Di, Extensions, Worker } from '@fastpanel/core';
 import { WEB_CONFIG } from './Const';
 
 /**
@@ -48,6 +48,12 @@ export class Extension extends Extensions.ExtensionDefines {
    * Registers a service provider.
    */
   async register () : Promise<any> {
+    /* Check config. */
+    if (!this.config.get('Ext/Web', false) &&
+      !this.config.get('Env.WEB_PORT', false)) {
+        this.logger.warn('Component "HTTP/S" is not configured correctly!');
+    }
+
     /* Check context. */
     if (this.context instanceof Worker.Handler) {
       /* Registration express server. */
@@ -89,8 +95,10 @@ export class Extension extends Extensions.ExtensionDefines {
         let server = null;
         
         /* SSL Files paths. */
-        let sslKey  = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.key';
-        let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.cert';
+        let sslKey  = './ssl/' + this.config.get('Env.WEB_DOMAIN',
+          this.config.get('Ext/Web.domain', WEB_CONFIG.domain)) + '.key';
+        let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN',
+          this.config.get('Ext/Web.domain', WEB_CONFIG.domain)) + '.cert';
         
         /* Create server. */
         if (fs.existsSync(sslKey) && fs.existsSync(sslCert)) {
@@ -125,8 +133,10 @@ export class Extension extends Extensions.ExtensionDefines {
 
       /* Run server. */
       this.http.listen({
-        port: this.config.get('Env.WEB_PORT', this.config.get('Ext/Web.port', 3000)),
-        host: this.config.get('Env.WEB_HOST', this.config.get('Ext/Web.host', '127.0.0.1'))
+        port: this.config.get('Env.WEB_PORT',
+          this.config.get('Ext/Web.port', WEB_CONFIG.port)),
+        host: this.config.get('Env.WEB_HOST',
+          this.config.get('Ext/Web.host', WEB_CONFIG.host))
       });
 
       /* Fire event. */

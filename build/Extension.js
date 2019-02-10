@@ -3,7 +3,7 @@
  * Extension.ts
  *
  * @author    Desionlab <fenixphp@gmail.com>
- * @copyright 2014 - 2018 Desionlab
+ * @copyright 2014 - 2019 Desionlab
  * @license   MIT
  */
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -21,6 +21,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const core_1 = require("@fastpanel/core");
+const Const_1 = require("./Const");
 /**
  * Create file stream instant.
  *
@@ -47,6 +48,11 @@ class Extension extends core_1.Extensions.ExtensionDefines {
      * Registers a service provider.
      */
     async register() {
+        /* Check config. */
+        if (!this.config.get('Ext/Web', false) &&
+            !this.config.get('Env.WEB_PORT', false)) {
+            this.logger.warn('Component "HTTP/S" is not configured correctly!');
+        }
         /* Check context. */
         if (this.context instanceof core_1.Worker.Handler) {
             /* Registration express server. */
@@ -78,8 +84,8 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                 /* Server container. */
                 let server = null;
                 /* SSL Files paths. */
-                let sslKey = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.key';
-                let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain')) + '.cert';
+                let sslKey = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain', Const_1.WEB_CONFIG.domain)) + '.key';
+                let sslCert = './ssl/' + this.config.get('Env.WEB_DOMAIN', this.config.get('Ext/Web.domain', Const_1.WEB_CONFIG.domain)) + '.cert';
                 /* Create server. */
                 if (fs_1.default.existsSync(sslKey) && fs_1.default.existsSync(sslCert)) {
                     server = https_1.default.createServer({
@@ -110,8 +116,8 @@ class Extension extends core_1.Extensions.ExtensionDefines {
             this.events.emit('web:getRoutes', this.web);
             /* Run server. */
             this.http.listen({
-                port: this.config.get('Env.WEB_PORT', this.config.get('Ext/Web.port', 3000)),
-                host: this.config.get('Env.WEB_HOST', this.config.get('Ext/Web.host', '127.0.0.1'))
+                port: this.config.get('Env.WEB_PORT', this.config.get('Ext/Web.port', Const_1.WEB_CONFIG.port)),
+                host: this.config.get('Env.WEB_HOST', this.config.get('Ext/Web.host', Const_1.WEB_CONFIG.host))
             });
             /* Fire event. */
             this.events.emit('http:startup', this.http);
