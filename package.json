@@ -1,6 +1,6 @@
 {
   "name": "@fastpanel/http",
-  "version": "0.2.1-alpha.1",
+  "version": "0.2.1-alpha.2",
   "description": "Extension to work with the \"HTTP\" protocol.",
   "author": "Desionlab <fenixphp@gmail.com>",
   "main": "build/index.js",
