@@ -1,6 +1,6 @@
 {
   "name": "@fastpanel/http",
-  "version": "0.2.1-alpha.2",
+  "version": "0.2.1-alpha.3",
   "description": "Extension to work with the \"HTTP\" protocol.",
   "author": "Desionlab <fenixphp@gmail.com>",
   "main": "build/index.js",
@@ -44,7 +44,7 @@
     "response-time": "^2.3.2"
   },
   "devDependencies": {
-    "@fastpanel/core": "^0.2.1-alpha.1",
+    "@fastpanel/core": "^0.2.1-alpha.3",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",
     "@types/compression": "^0.0.36",

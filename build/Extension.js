@@ -68,7 +68,7 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                     skip: function (request, response) { return response.statusCode < 400; }
                 }));
                 /* Mount static files handler. */
-                web.use(express_1.default.static('./public'));
+                web.use(express_1.default.static('public'));
                 /* Mount cross-origin resource sharing. */
                 web.use(cors_1.default());
                 /* Mount cookie parser. */

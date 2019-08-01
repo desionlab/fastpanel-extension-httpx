@@ -72,7 +72,7 @@ export class Extension extends Extensions.ExtensionDefines {
         }));
         
         /* Mount static files handler. */
-        web.use(Express.static('./public'));
+        web.use(Express.static('public'));
         
         /* Mount cross-origin resource sharing. */
         web.use(ExpressCors());
