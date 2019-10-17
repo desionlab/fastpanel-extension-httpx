@@ -19,7 +19,6 @@ const morgan_1 = __importDefault(require("morgan"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const cors_1 = __importDefault(require("cors"));
 const core_1 = require("@fastpanel/core");
 const Const_1 = require("./Const");
 /**
@@ -69,8 +68,6 @@ class Extension extends core_1.Extensions.ExtensionDefines {
                 }));
                 /* Mount static files handler. */
                 web.use(express_1.default.static('public'));
-                /* Mount cross-origin resource sharing. */
-                web.use(cors_1.default());
                 /* Mount cookie parser. */
                 web.use(cookie_parser_1.default());
                 /* Mount ajax request parser. */

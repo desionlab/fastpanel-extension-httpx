@@ -16,7 +16,6 @@ import Caporal from 'caporal';
 import Express from 'express';
 import ExpressBodyParser from 'body-parser';
 import ExpressCookieParser from 'cookie-parser';
-import ExpressCors from 'cors';
 import { Di, Extensions, Worker } from '@fastpanel/core';
 import { WEB_CONFIG } from './Const';
 
@@ -74,9 +73,6 @@ export class Extension extends Extensions.ExtensionDefines {
         /* Mount static files handler. */
         web.use(Express.static('public'));
         
-        /* Mount cross-origin resource sharing. */
-        web.use(ExpressCors());
-
         /* Mount cookie parser. */
         web.use(ExpressCookieParser());
         
